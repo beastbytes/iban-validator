@@ -1,0 +1,41 @@
+{
+    "name": "beastbytes/iban",
+    "type": "library",
+    "description": "International Bank Account Number helper methods and validator",
+    "keywords": [
+        "helper",
+        "validator",
+        "International Bank Account Number",
+        "IBAN"
+    ],
+    "support": {
+        "issues": "https://github.com/beastbytes/phone-number-validator/issues",
+        "source": "https://github.com/beastbytes/phone-number-validator"
+    },
+    "license": "BSD-3-Clause",
+    "authors": [{
+        "name": "Chris Yates",
+        "email": "chris.l.yates@gmail.com"
+    }],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.0",
+        "yiisoft/validator": "3.0.x-dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "roave/security-advisories": "dev-latest",
+        "vimeo/psalm": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "BeastBytes\\Iban\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BeastBytes\\Iban\\Tests\\": "tests"
+        }
+    }
+}
