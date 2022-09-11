@@ -7,26 +7,30 @@ namespace BeastBytes\Iban\Rule;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
-final class Iban implements ParametrizedRuleInterface, BeforeValidationInterface
+final class Iban implements BeforeValidationInterface, SerializableRuleInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         private string $invalidChecksumMessage = 'Checksum not valid',
         private string $invalidCountryMessage = 'Country code "{country}" not valid',
         private string $invalidStructureMessage = 'IBAN structure not valid for country "{country}"',
-        private bool $skipOnEmpty = false,
+        /**
+         * @var bool|callable|null $skipOnEmpty
+         */
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var Closure(mixed, ValidationContext):bool|null $when
          */
         private ?Closure $when = null,
     ) {
@@ -60,16 +64,19 @@ final class Iban implements ParametrizedRuleInterface, BeforeValidationInterface
             'invalidChecksumMessage' => $this->invalidChecksumMessage,
             'invalidCountryMessage' => [
                 'message' => $this->invalidCountryMessage,
-                'parameters' => [
-                ],
+                'parameters' => [],
             ],
             'invalidStructureMessage' => [
                 'message' => $this->invalidStructureMessage,
-                'parameters' => [
-                ],
+                'parameters' => [],
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return IbanHandler::class;
     }
 }

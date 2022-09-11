@@ -10,26 +10,19 @@ namespace BeastBytes\Iban\Rule;
 
 use BeastBytes\Iban\Iban as Helper;
 use InvalidArgumentException;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * IBAN validator
- *
- * @package Iban
- * @author Chris Yates
+ * Checks that the value is a valid {@link https://www.iban.com/ International Bank Account Number (IBAN)}
  */
 final class IbanHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
     }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
@@ -51,21 +44,31 @@ final class IbanHandler implements RuleHandlerInterface
 
         if (!array_key_exists($country, $ibanFormats)) {
             $result->addError(
-                $this->formatter->format(
-                    $rule->getInvalidCountryMessage(), compact('country')
-                )
+                $this
+                    ->translator
+                    ->translate(
+                        $rule->getInvalidCountryMessage(), compact('country')
+                    )
             );
         } else {
             if (preg_match('/' . $ibanFormats[$country]['pattern'] . '/', $value) === 0) {
                 $result->addError(
-                    $this->formatter->format(
-                        $rule->getInvalidStructureMessage(), compact('country')
-                    )
+                    $this
+                        ->translator
+                        ->translate(
+                            $rule->getInvalidStructureMessage(), compact('country')
+                        )
                 );
             }
 
             if (Helper::mod97($value) !== 1) {
-                $result->addError($this->formatter->format($rule->getInvalidChecksumMessage()));
+                $result->addError(
+                    $this
+                        ->translator
+                        ->translate(
+                            $rule->getInvalidChecksumMessage()
+                        )
+                );
             }
         }
 
