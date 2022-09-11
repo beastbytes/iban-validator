@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\Iban\Tests\Rule;
+namespace Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Tests\Stub\TranslatorFactory;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
 
 abstract class AbstractRuleTest extends TestCase
 {
     /**
      * @dataProvider optionsDataProvider
      */
-    public function testOptions(ParametrizedRuleInterface $rule, array $expectedOptions): void
+    public function testOptions(SerializableRuleInterface $rule, array $expectedOptions): void
     {
         $options = $rule->getOptions();
 
@@ -25,7 +28,18 @@ abstract class AbstractRuleTest extends TestCase
         $this->assertEquals(lcfirst(substr($rule::class, strrpos($rule::class, '\\') + 1)), $rule->getName());
     }
 
+    public function testHandlerClassName(): void
+    {
+        $translator = (new TranslatorFactory())->create();
+        $resolver = new SimpleRuleHandlerContainer($translator);
+        $rule = $this->getRule();
+        $this->assertInstanceOf($rule->getHandlerClassName(), $resolver->resolve($rule->getHandlerClassName()));
+    }
+
     abstract protected function optionsDataProvider(): array;
 
-    abstract protected function getRule(): ParametrizedRuleInterface;
+    /**
+     * @return BeforeValidationTrait|SerializableRuleInterface
+     */
+    abstract protected function getRule(): SerializableRuleInterface;
 }

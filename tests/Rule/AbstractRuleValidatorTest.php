@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\Iban\Tests\Rule;
+namespace Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Tests\Stub\FakeValidatorFactory;
+use Tests\Stub\TranslatorFactory;
+use Yiisoft\Translator\TranslatorInterface;
+use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 abstract class AbstractRuleValidatorTest extends TestCase
@@ -60,21 +61,15 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
     protected function validate(mixed $value, object $config): Result
     {
-        $ruleValidator = $this->getValidator();
-        $validator = $this->makeFakeValidator();
-        $context = new ValidationContext($validator, null);
+        $ruleHandler = $this->getRuleHandler();
+        $context = $this->getValidationContext();
 
-        return $ruleValidator->validate($value, $config, $context);
+        return $ruleHandler->validate($value, $config, $context);
     }
 
-    protected function formatMessage(string $message, array $params): string
+    protected function getTranslator(): TranslatorInterface
     {
-        return (new Formatter())->format($message, $params);
-    }
-
-    private function makeFakeValidator(): Validator
-    {
-        return new Validator(new SimpleRuleHandlerContainer());
+        return (new TranslatorFactory())->create();
     }
 
     abstract public function customErrorMessagesProvider(): array;
@@ -83,5 +78,15 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
     abstract public function failedValidationProvider(): array;
 
-    abstract protected function getValidator(): RuleHandlerInterface;
+    abstract protected function getRuleHandler(): RuleHandlerInterface;
+
+    protected function getValidationContext(): ValidationContext
+    {
+        $validator = FakeValidatorFactory::make();
+        return new ValidationContext(
+            $validator,
+            new ArrayDataSet(['attribute' => 100, 'number' => 100, 'string' => '100']),
+            'number'
+        );
+    }
 }

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\Iban\Tests\Rule;
+namespace Tests\Rule;
 
 use BeastBytes\Iban\Rule\Iban;
 use BeastBytes\Iban\Rule\IbanHandler;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class IbanHandlerTest extends AbstractRuleValidatorTest
 {
@@ -79,8 +79,8 @@ final class IbanHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new IbanHandler();
+        return new IbanHandler($this->getTranslator());
     }
 }

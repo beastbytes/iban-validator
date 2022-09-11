@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\Iban\Tests\Rule;
+namespace Tests\Rule;
 
 use BeastBytes\Iban\Rule\Iban;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 
 class IbanTest extends AbstractRuleTest
 {
@@ -35,7 +35,7 @@ class IbanTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): SerializableRuleInterface
     {
         return new Iban();
     }
