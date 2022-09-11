@@ -18,6 +18,8 @@ use \InvalidArgumentException;
  */
 class Iban
 {
+    private static array $ibanFormats;
+
     /**
      * Generates a valid IBAN
      *
@@ -34,10 +36,8 @@ class Iban
     public static function generateIban(string $country, array|string $data): string
     {
         $country = strtoupper($country);
-        /** @var array $specs */
-        $specs = require __DIR__ . '/ibanFormats.php';
 
-        if (!array_key_exists($country, $specs)) {
+        if (!self::usesIban($country)) {
             throw new InvalidArgumentException('Country "' . $country . '" does not use IBAN');
         }
 
@@ -48,7 +48,7 @@ class Iban
         $data = str_replace(' ', '', strtoupper($data));
 
         $iban = $country . '00' . $data;
-        if (preg_match('/' . $specs[$country]['pattern'] . '/', $iban, $matches) === 0) {
+        if (preg_match('/' . self::$ibanFormats[$country]['pattern'] . '/', $iban, $matches) === 0) {
             throw new InvalidArgumentException('Data not the correct format for "' . $country . '"');
         }
 
@@ -65,16 +65,14 @@ class Iban
     {
         $iban = str_replace(' ', '', $iban);
         $country = substr($iban, 0, 2);
-        /** @var array $specs */
-        $specs = require __DIR__ . '/ibanFormats.php';
 
-        if (!array_key_exists($country, $specs)) {
+        if (!self::usesIban($country)) {
             throw new InvalidArgumentException('Country "' . $country . '" does not use IBAN');
         }
 
         $matches = [];
-        preg_match('/' . $specs[$country]['pattern'] . '/', $iban, $matches);
-        return array_combine($specs[$country]['fields'], array_slice($matches, 1));
+        preg_match('/' . self::$ibanFormats[$country]['pattern'] . '/', $iban, $matches);
+        return array_combine(self::$ibanFormats[$country]['fields'], array_slice($matches, 1));
     }
 
     public static function checkDigits(string $iban): string
@@ -107,5 +105,12 @@ class Iban
         }
 
         return $mod97;
+    }
+
+    public static function usesIban(string $country): bool
+    {
+        self::$ibanFormats = require __DIR__ . '/ibanFormats.php';
+
+        return array_key_exists($country, self::$ibanFormats);
     }
 }
