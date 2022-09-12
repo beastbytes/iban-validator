@@ -11,10 +11,7 @@ namespace BeastBytes\Iban;
 use \InvalidArgumentException;
 
 /**
- * Static helper methods for IBANs.
- *
- * @package Yii2-Iban
- * @author Chris Yates
+ * Static helper methods for {@link https://www.iban.com/ International Bank Account Number (IBAN)}
  */
 class Iban
 {
@@ -25,13 +22,14 @@ class Iban
      *
      * The account data varies by country - see {@link IbanHandler.php} for country IBAN definitions
      *
-     * @param string ISO-3166 Alpha-2 code of the country
-     * @param string|string[] Data for the IBAN according to the country, e.g. bank identifier, account number, ...,
-     * in the correct order, e.g. for GB, either [Bank identifier, Branch identifier, Account number]
+     * @param string $country ISO-3166 Alpha-2 code of the country
+     * @param string|string[] $data Data for the IBAN according to the country,
+     * e.g. bank identifier, account number, ..., in the correct order, e.g. for GB,
+     * either [Bank identifier, Branch identifier, Account number]
      * or Bank identifier . Branch identifier . Account number
      * @return string The IBAN
-     * @example IbanHelper::generateIban('GB', ['BUKB', '202015', '55555555']) returns 'GB33BUKB20201555555555'
-     * @example IbanHelper::generateIban('GB', 'BUKB20201555555555') returns 'GB33BUKB20201555555555'
+     * @example IbanHelper::generateIban('GB', ['NWBK', '601613', '31926819']) returns 'GB29NWBK60161331926819'
+     * @example IbanHelper::generateIban('GB', 'NWBK60161331926819') returns 'GB29NWBK60161331926819'
      */
     public static function generateIban(string $country, array|string $data): string
     {
