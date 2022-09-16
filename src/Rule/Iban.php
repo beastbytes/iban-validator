@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\Iban\Validator\Rule;
+namespace BeastBytes\IBAN\Validator\Rule;
 
 use BeastBytes\Iban\IbanStorageInterface;
 use Closure;

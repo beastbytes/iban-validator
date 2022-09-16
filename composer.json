@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BeastBytes\\Iban\\Validator\\": "src"
+            "BeastBytes\\IBAN\\Validator\\": "src"
         }
     },
     "autoload-dev": {
