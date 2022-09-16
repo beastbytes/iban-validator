@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\Iban\Rule;
+namespace BeastBytes\Iban\Validator\Rule;
 
-use BeastBytes\Iban\Iban as Helper;
+use BeastBytes\Iban\Helper\Iban as IbanHelper;
 use InvalidArgumentException;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -39,10 +39,9 @@ final class IbanHandler implements RuleHandlerInterface
         $value = strtoupper(str_replace(' ', '', $value));
         $country = substr($value, 0, 2);
 
-        /** @var array $ibanFormats */
-        $ibanFormats = require dirname(__DIR__) . '/ibanFormats.php';
+        $ibans = $rule->getIbans();
 
-        if (!array_key_exists($country, $ibanFormats)) {
+        if (!$ibans->hasCountry($country)) {
             $result->addError(
                 $this
                     ->translator
@@ -50,26 +49,22 @@ final class IbanHandler implements RuleHandlerInterface
                         $rule->getInvalidCountryMessage(), compact('country')
                     )
             );
-        } else {
-            if (preg_match('/' . $ibanFormats[$country]['pattern'] . '/', $value) === 0) {
-                $result->addError(
-                    $this
-                        ->translator
-                        ->translate(
-                            $rule->getInvalidStructureMessage(), compact('country')
-                        )
-                );
-            }
-
-            if (Helper::mod97($value) !== 1) {
-                $result->addError(
-                    $this
-                        ->translator
-                        ->translate(
-                            $rule->getInvalidChecksumMessage()
-                        )
-                );
-            }
+        } elseif (preg_match($ibans->getPattern($country), $value) === 0) {
+            $result->addError(
+                $this
+                    ->translator
+                    ->translate(
+                        $rule->getInvalidStructureMessage(), compact('country')
+                    )
+            );
+        } elseif (IbanHelper::mod97($value) !== 1) {
+            $result->addError(
+                $this
+                    ->translator
+                    ->translate(
+                        $rule->getInvalidChecksumMessage()
+                    )
+            );
         }
 
         return $result;

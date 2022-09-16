@@ -1,7 +1,7 @@
 {
-    "name": "beastbytes/iban",
+    "name": "beastbytes/iban-validator",
     "type": "library",
-    "description": "International Bank Account Number helper methods and validator",
+    "description": "International Bank Account Number validator",
     "keywords": [
         "helper",
         "validator",
@@ -21,6 +21,8 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.0",
+        "beastbytes/iban-helper": "dev-master",
+        "beastbytes/iban-php": "dev-master",
         "yiisoft/validator": "3.0.x-dev"
     },
     "require-dev": {
@@ -30,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BeastBytes\\Iban\\": "src"
+            "BeastBytes\\Iban\\Validator\\": "src"
         }
     },
     "autoload-dev": {

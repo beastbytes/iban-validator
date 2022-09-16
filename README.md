@@ -1,5 +1,5 @@
-# IBAN
-IBAN provides helper methods and validation for [IBAN (International Bank Account Number)](https://www.iban.com).
+# IBAN Validator
+IBAN provides validation for [IBAN (International Bank Account Number)](https://www.iban.com).
 
 ## Installation
 
@@ -8,13 +8,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist beastbytes/iban
+php composer.phar require --prefer-dist beastbytes/iban-validator
 ```
 
 or add
 
 ```json
-"beastbytes/iban": "^1.0.0"
+"beastbytes/iban-validator": "^1.0.0"
 ```
 
 to the require section of your composer.json.
