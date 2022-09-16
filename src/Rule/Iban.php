@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace BeastBytes\IBAN\Validator\Rule;
 
-use BeastBytes\Iban\IbanStorageInterface;
+use BeastBytes\IBAN\IbanStorageInterface;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;

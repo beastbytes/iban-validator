@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace BeastBytes\IBAN\Validator\Rule;
 
-use BeastBytes\Iban\Helper\Iban as IbanHelper;
+use BeastBytes\IBAN\Helper\Iban as IbanHelper;
 use InvalidArgumentException;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;

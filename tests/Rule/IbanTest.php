@@ -8,20 +8,20 @@ declare(strict_types=1);
 
 namespace Tests\Rule;
 
-use BeastBytes\Iban\Formats\IbanFormat;
-use BeastBytes\Iban\Rule\Iban;
+use BeastBytes\IBAN\PHP\IbanStorage;
+use BeastBytes\IBAN\Validator\Rule\Iban;
 use Yiisoft\Validator\SerializableRuleInterface;
 
 class IbanTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
-        $ibanFormats = new IbanFormat();
+        $ibans = new IbanStorage();
         return [
             [
-                new Iban($ibanFormats),
+                new Iban($ibans),
                 [
-                    'ibanFormats' => $ibanFormats,
+                    'ibans' => $ibans,
                     'invalidChecksumMessage' => 'Checksum not valid',
                     'invalidCountryMessage' => [
                         'message' => 'Country code "{country}" not valid',
@@ -40,6 +40,6 @@ class IbanTest extends AbstractRuleTest
 
     protected function getRule(): SerializableRuleInterface
     {
-        return new Iban(new IbanFormat());
+        return new Iban(new IbanStorage());
     }
 }
