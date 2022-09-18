@@ -26,7 +26,7 @@ final class Iban implements BeforeValidationInterface, SerializableRuleInterface
     use SkipOnEmptyTrait;
 
     public function __construct(
-        private IbanDataInterface $ibans,
+        private IbanDataInterface $ibanData,
         private string $invalidChecksumMessage = 'Checksum not valid',
         private string $invalidCountryMessage = 'Country code "{country}" not valid',
         private string $invalidStructureMessage = 'IBAN structure not valid for country "{country}"',
@@ -42,9 +42,9 @@ final class Iban implements BeforeValidationInterface, SerializableRuleInterface
     ) {
     }
 
-    public function getIbans(): IbanDataInterface
+    public function getIbanData(): IbanDataInterface
     {
-        return $this->ibans;
+        return $this->ibanData;
     }
 
     public function getInvalidChecksumMessage(): string
@@ -63,7 +63,7 @@ final class Iban implements BeforeValidationInterface, SerializableRuleInterface
     }
 
     #[ArrayShape([
-        'ibans' => IbanDataInterface::class,
+        'ibanData' => IbanDataInterface::class,
         'invalidChecksumMessage' => 'string',
         'invalidCountryMessage' => 'array',
         'invalidStructureMessage' => 'array',
@@ -73,7 +73,7 @@ final class Iban implements BeforeValidationInterface, SerializableRuleInterface
     public function getOptions(): array
     {
         return [
-            'ibans' => $this->ibans,
+            'ibanData' => $this->ibanData,
             'invalidChecksumMessage' => $this->invalidChecksumMessage,
             'invalidCountryMessage' => [
                 'message' => $this->invalidCountryMessage,

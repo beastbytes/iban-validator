@@ -39,10 +39,10 @@ final class IbanHandler implements RuleHandlerInterface
         $value = strtoupper(str_replace(' ', '', $value));
         $country = substr($value, 0, 2);
 
-        $ibans = $rule->getIbans();
+        $ibanData = $rule->getIbanData();
 
-        if ($ibans->hasCountry($country)) {
-            if (preg_match($ibans->getPattern($country), $value) === 0) {
+        if ($ibanData->hasCountry($country)) {
+            if (preg_match($ibanData->getPattern($country), $value) === 0) {
                 $result->addError(
                     $this
                         ->translator

@@ -16,12 +16,12 @@ class IbanTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
-        $ibans = new IbanData();
+        $ibanData = new IbanData();
         return [
             [
-                new Iban($ibans),
+                new Iban($ibanData),
                 [
-                    'ibans' => $ibans,
+                    'ibanData' => $ibanData,
                     'invalidChecksumMessage' => 'Checksum not valid',
                     'invalidCountryMessage' => [
                         'message' => 'Country code "{country}" not valid',
