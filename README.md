@@ -1,5 +1,5 @@
-# IBAN Validator
-IBAN provides validation for [IBAN (International Bank Account Number)](https://www.iban.com).
+# IBAN Validator (iban-validator)
+Provides validation for [IBAN (International Bank Account Number)](https://www.iban.com).
 
 ## Installation
 
@@ -18,3 +18,5 @@ or add
 ```
 
 to the require section of your composer.json.
+
+An IbanDataInterface implementation is also required, e.g. beastbytes/iban-data-php

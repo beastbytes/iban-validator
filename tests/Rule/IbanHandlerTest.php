@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Rule;
 
-use BeastBytes\IBAN\PHP\IbanStorage;
+use BeastBytes\IBAN\PHP\IbanData;
 use BeastBytes\IBAN\Validator\Rule\Iban;
 use BeastBytes\IBAN\Validator\Rule\IbanHandler;
 use Yiisoft\Validator\Error;
@@ -14,7 +14,7 @@ final class IbanHandlerTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
     {
-        $rule = new Iban(new IbanStorage(), skipOnError: true);
+        $rule = new Iban(new IbanData(), skipOnError: true);
 
         return [
             'Invalid country' => [
@@ -72,7 +72,7 @@ final class IbanHandlerTest extends AbstractRuleValidatorTest
 
     public function passedValidationProvider(): array
     {
-        $rule = new Iban(new IbanStorage());
+        $rule = new Iban(new IbanData());
 
         $passedValidationProvider = [];
         $ibans = array_keys(require dirname(__DIR__) . '/testIbans.php');
@@ -86,7 +86,7 @@ final class IbanHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         $rule = new Iban(
-            new IbanStorage(),
+            new IbanData(),
             invalidChecksumMessage: 'Custom Invalid Checksum message',
             invalidCountryMessage: 'Custom Invalid Country message',
             invalidStructureMessage: 'Custom Invalid Structure message'

@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace BeastBytes\IBAN\Validator\Rule;
 
-use BeastBytes\IBAN\IbanStorageInterface;
+use BeastBytes\IBAN\IbanDataInterface;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;
@@ -26,7 +26,7 @@ final class Iban implements BeforeValidationInterface, SerializableRuleInterface
     use SkipOnEmptyTrait;
 
     public function __construct(
-        private IbanStorageInterface $ibans,
+        private IbanDataInterface $ibans,
         private string $invalidChecksumMessage = 'Checksum not valid',
         private string $invalidCountryMessage = 'Country code "{country}" not valid',
         private string $invalidStructureMessage = 'IBAN structure not valid for country "{country}"',
@@ -42,7 +42,7 @@ final class Iban implements BeforeValidationInterface, SerializableRuleInterface
     ) {
     }
 
-    public function getIbans(): IbanStorageInterface
+    public function getIbans(): IbanDataInterface
     {
         return $this->ibans;
     }
@@ -63,7 +63,7 @@ final class Iban implements BeforeValidationInterface, SerializableRuleInterface
     }
 
     #[ArrayShape([
-        'ibans' => IbanStorageInterface::class,
+        'ibans' => IbanDataInterface::class,
         'invalidChecksumMessage' => 'string',
         'invalidCountryMessage' => 'array',
         'invalidStructureMessage' => 'array',

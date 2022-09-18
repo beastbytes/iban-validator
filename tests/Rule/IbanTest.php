@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Tests\Rule;
 
-use BeastBytes\IBAN\PHP\IbanStorage;
+use BeastBytes\IBAN\PHP\IbanData;
 use BeastBytes\IBAN\Validator\Rule\Iban;
 use Yiisoft\Validator\SerializableRuleInterface;
 
@@ -16,7 +16,7 @@ class IbanTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
-        $ibans = new IbanStorage();
+        $ibans = new IbanData();
         return [
             [
                 new Iban($ibans),
@@ -40,6 +40,6 @@ class IbanTest extends AbstractRuleTest
 
     protected function getRule(): SerializableRuleInterface
     {
-        return new Iban(new IbanStorage());
+        return new Iban(new IbanData());
     }
 }

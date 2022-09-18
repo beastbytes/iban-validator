@@ -22,10 +22,10 @@
     "require": {
         "php": "^8.0",
         "beastbytes/iban-helper": "dev-master",
-        "beastbytes/iban-php": "dev-master",
         "yiisoft/validator": "3.0.x-dev"
     },
     "require-dev": {
+        "beastbytes/iban-data-php": "dev-master",
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-latest",
         "vimeo/psalm": "^4.3"
