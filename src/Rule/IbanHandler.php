@@ -41,28 +41,30 @@ final class IbanHandler implements RuleHandlerInterface
 
         $ibans = $rule->getIbans();
 
-        if (!$ibans->hasCountry($country)) {
+        if ($ibans->hasCountry($country)) {
+            if (preg_match($ibans->getPattern($country), $value) === 0) {
+                $result->addError(
+                    $this
+                        ->translator
+                        ->translate(
+                            $rule->getInvalidStructureMessage(), compact('country')
+                        )
+                );
+            } elseif (IbanHelper::mod97($value) !== 1) {
+                $result->addError(
+                    $this
+                        ->translator
+                        ->translate(
+                            $rule->getInvalidChecksumMessage()
+                        )
+                );
+            }
+        } else {
             $result->addError(
                 $this
                     ->translator
                     ->translate(
                         $rule->getInvalidCountryMessage(), compact('country')
-                    )
-            );
-        } elseif (preg_match($ibans->getPattern($country), $value) === 0) {
-            $result->addError(
-                $this
-                    ->translator
-                    ->translate(
-                        $rule->getInvalidStructureMessage(), compact('country')
-                    )
-            );
-        } elseif (IbanHelper::mod97($value) !== 1) {
-            $result->addError(
-                $this
-                    ->translator
-                    ->translate(
-                        $rule->getInvalidChecksumMessage()
                     )
             );
         }
