@@ -11,7 +11,6 @@ namespace BeastBytes\IBAN\Validator\Rule;
 use BeastBytes\IBAN\IbanDataInterface;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -23,7 +22,6 @@ use Yiisoft\Validator\WhenInterface;
 
 final class Iban implements SerializableRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -63,6 +61,11 @@ final class Iban implements SerializableRuleInterface, SkipOnEmptyInterface, Ski
     public function getInvalidStructureMessage(): string
     {
         return $this->invalidStructureMessage;
+    }
+
+    public function getName(): string
+    {
+        return 'iban';
     }
 
     #[ArrayShape([
