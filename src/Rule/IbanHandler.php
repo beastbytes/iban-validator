@@ -21,10 +21,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class IbanHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!is_string($value)) {
@@ -44,28 +40,16 @@ final class IbanHandler implements RuleHandlerInterface
         if ($ibanData->hasCountry($country)) {
             if (preg_match($ibanData->getPattern($country), $value) === 0) {
                 $result->addError(
-                    $this
-                        ->translator
-                        ->translate(
-                            $rule->getInvalidStructureMessage(), compact('country')
-                        )
+                    $rule->getInvalidStructureMessage(), compact('country')
                 );
             } elseif (IbanHelper::mod97($value) !== 1) {
                 $result->addError(
-                    $this
-                        ->translator
-                        ->translate(
-                            $rule->getInvalidChecksumMessage()
-                        )
+                    $rule->getInvalidChecksumMessage()
                 );
             }
         } else {
             $result->addError(
-                $this
-                    ->translator
-                    ->translate(
-                        $rule->getInvalidCountryMessage(), compact('country')
-                    )
+                $rule->getInvalidCountryMessage(), compact('country')
             );
         }
 
