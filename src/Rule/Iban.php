@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright © 2022 BeastBytes - All rights reserved
+ * @copyright Copyright © 2023 BeastBytes - All rights reserved
  * @license BSD 3-Clause
  */
 
@@ -14,27 +14,35 @@ use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
-final class Iban implements SerializableRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
+final class Iban implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    public const INCORRECT_INPUT_MESSAGE = 'Invalid type: "{type}". IBAN must be a string.';
+    public const INVALID_CHECKSUM_MESSAGE = 'Checksum not valid.';
+    public const INVALID_COUNTRY_MESSAGE = 'Country code "{country}" not valid.';
+    public const INVALID_STRUCTURE_MESSAGE = 'IBAN structure not valid for country "{country}".';
+    public const NAME = 'iban';
+
     public function __construct(
         private IbanDataInterface $ibanData,
-        private string $invalidChecksumMessage = 'Checksum not valid',
-        private string $invalidCountryMessage = 'Country code "{country}" not valid',
-        private string $invalidStructureMessage = 'IBAN structure not valid for country "{country}"',
+        private string $incorrectInputMessage = self::INCORRECT_INPUT_MESSAGE,
+        private string $invalidChecksumMessage = self::INVALID_CHECKSUM_MESSAGE,
+        private string $invalidCountryMessage = self::INVALID_COUNTRY_MESSAGE,
+        private string $invalidStructureMessage = self::INVALID_STRUCTURE_MESSAGE,
         /**
          * @var bool|callable|null $skipOnEmpty
          */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null $when
@@ -46,6 +54,11 @@ final class Iban implements SerializableRuleInterface, SkipOnEmptyInterface, Ski
     public function getIbanData(): IbanDataInterface
     {
         return $this->ibanData;
+    }
+
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
     }
 
     public function getInvalidChecksumMessage(): string
@@ -65,11 +78,12 @@ final class Iban implements SerializableRuleInterface, SkipOnEmptyInterface, Ski
 
     public function getName(): string
     {
-        return 'iban';
+        return self::NAME;
     }
 
     #[ArrayShape([
         'ibanData' => IbanDataInterface::class,
+        'incorrectInputMessage' => 'array',
         'invalidChecksumMessage' => 'string',
         'invalidCountryMessage' => 'array',
         'invalidStructureMessage' => 'array',
@@ -80,6 +94,10 @@ final class Iban implements SerializableRuleInterface, SkipOnEmptyInterface, Ski
     {
         return [
             'ibanData' => $this->ibanData,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+                'parameters' => [],
+            ],
             'invalidChecksumMessage' => $this->invalidChecksumMessage,
             'invalidCountryMessage' => [
                 'message' => $this->invalidCountryMessage,
@@ -94,7 +112,7 @@ final class Iban implements SerializableRuleInterface, SkipOnEmptyInterface, Ski
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string|RuleHandlerInterface
     {
         return IbanHandler::class;
     }

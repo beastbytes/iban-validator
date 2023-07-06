@@ -17,6 +17,7 @@
   <testsuites>
     <testsuite name="IBAN Validator Tests">
       <directory suffix=".php">./tests</directory>
+      <exclude>./tests/assets</exclude>
     </testsuite>
   </testsuites>
 

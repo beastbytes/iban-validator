@@ -1,5 +1,5 @@
 # IBAN Validator (iban-validator)
-Provides validation for [IBAN (International Bank Account Number)](https://www.iban.com).
+Provides validation for [ISO 13616-1:2007 International Bank Account Numbers (IBAN)](https://www.iban.com).
 
 ## Installation
 

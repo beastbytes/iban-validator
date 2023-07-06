@@ -31,6 +31,10 @@ phpunit.phar
 
 # local phpunit config
 /phpunit.xml
+/phpunit.xml.dist
+
+# logs
+/logs
 
 # NPM packages
 /node_modules
