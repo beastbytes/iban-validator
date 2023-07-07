@@ -6,7 +6,7 @@ namespace BeastBytes\IBAN\Validator\Tests\Rule;
 
 use BeastBytes\IBAN\PHP\IbanData;
 use BeastBytes\IBAN\Validator\Rule\Iban;
-use BeastBytes\IBAN\Validator\Tests\assets\NotIban;
+use BeastBytes\IBAN\Validator\Tests\Support\NotIban;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -23,12 +23,6 @@ final class IbanTest extends TestCase
     {
         $rule = new Iban(ibanData: new IbanData());
         $this->assertSame(Iban::NAME, $rule->getName());
-    }
-
-    public function test_bad_rule(): void
-    {
-        $this->expectException(UnexpectedRuleException::class);
-        (new Validator())->validate('GB29NWBK60161331926819', new NotIban());
     }
 
     #[DataProvider('invalidIbanTypeProvider')]

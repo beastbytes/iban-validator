@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\IBAN\Validator\Tests\assets;
+namespace BeastBytes\IBAN\Validator\Tests\Support;
 
 use BeastBytes\IBAN\Validator\Rule\IbanHandler;
 use Yiisoft\Validator\RuleInterface;
